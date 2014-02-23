@@ -1,0 +1,7 @@
+CREATE DATABASE `main_word` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+CREATE TABLE `word` (
+  `idword` int(11) NOT NULL AUTO_INCREMENT,
+  `word` varchar(45) NOT NULL,
+  PRIMARY KEY (`idword`)
+) ENGINE=InnoDB AUTO_INCREMENT=147 DEFAULT CHARSET=utf8;
