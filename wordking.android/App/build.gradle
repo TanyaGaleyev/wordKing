@@ -1,0 +1,43 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.8.+'
+    }
+}
+apply plugin: 'android'
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url 'http://ksoap2-android.googlecode.com/svn/m2-repo'
+    }
+}
+
+android {
+    compileSdkVersion 17
+    buildToolsVersion '19.0.2'
+
+    defaultConfig {
+        minSdkVersion 11
+        targetSdkVersion 19
+    }
+    buildTypes {
+        release {
+            runProguard true
+            proguardFile getDefaultProguardFile('proguard-android-optimize.txt')
+        }
+    }
+    productFlavors {
+        defaultFlavor {
+            proguardFile 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.google.code.ksoap2-android:ksoap2-android:3.2.0'
+}
