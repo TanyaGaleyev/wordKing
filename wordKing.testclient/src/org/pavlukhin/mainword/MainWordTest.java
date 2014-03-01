@@ -11,7 +11,7 @@ import java.net.URL;
  */
 public class MainWordTest {
     public static void main(String[] args) throws Exception {
-        URL url = new URL("http://localhost:8080/word/services/WordService?wsdl");
+        URL url = new URL("http://wordking-pavlukhin.rhcloud.com//services/WordService?wsdl");
         QName qname = new QName("http://mainword.pavlukhin.org/", "WordServiceImplService");
         Service service = Service.create(url, qname);
         WordService mainWord = service.getPort(WordService.class);
