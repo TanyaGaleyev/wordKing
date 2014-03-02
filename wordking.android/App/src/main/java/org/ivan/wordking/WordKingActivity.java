@@ -42,15 +42,22 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
         for (int layout : layouts)
             flipper.addView(inflater.inflate(layout, null));
 
-        for (int i = 0; i < flipper.getChildCount(); i++) {
-            Button submitBtn = (Button) flipper.getChildAt(i).findViewById(R.id.submit);
-            submitBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    submit();
-                }
-            });
-        }
+//        for (int i = 0; i < flipper.getChildCount(); i++) {
+//            Button submitBtn = (Button) flipper.getChildAt(i).findViewById(R.id.submit);
+//            submitBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    submit();
+//                }
+//            });
+//        }
+        Button submitBtn = (Button) findViewById(R.id.submit);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submit();
+            }
+        });
 
         load();
     }
@@ -78,7 +85,8 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
     }
 
     private EditText wordInput() {
-        return (EditText) activePage().findViewById(R.id.enterWord);
+//        return (EditText) activePage().findViewById(R.id.enterWord);
+        return (EditText) findViewById(R.id.enterWord);
     }
 
     private TextView rangeView() {

@@ -7,6 +7,21 @@
     android:id="@+id/root"
     android:background="#fff0ebf4">
 
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/enterWord"
+        android:inputType="text" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:id="@+id/submit"
+        android:layout_gravity="center_horizontal" />
+
     <ViewFlipper
         android:id="@+id/flipper"
         android:layout_width="match_parent"
