@@ -38,8 +38,7 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
         findViewById(R.id.root).setOnTouchListener(this);
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        int layouts[] = new int[]{R.layout.wordpanel, R.layout.wordpanel};
-        for (int layout : layouts)
+        for (int layout : new int[]{R.layout.wordpanel, R.layout.wordpanel})
             flipper.addView(inflater.inflate(layout, null));
 
 //        for (int i = 0; i < flipper.getChildCount(); i++) {
