@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -21,6 +22,8 @@ public class WordDB {
     public static final String GET_WORDS_PART =
             "SELECT word, COUNT(word) as cnt FROM word GROUP BY word ORDER BY cnt desc LIMIT ?,?";
     public static final String INSERT_WORD = "INSERT INTO word (word) VALUES(?)";
+    public static final String GET_WORD_POSITION =
+            "SELECT * FROM (SELECT @rn:=@rn+1, word FROM (SELECT word FROM word GROUP BY word ORDER BY COUNT(word) DESC) g join (SELECT @rn:=-1) r) t WHERE word=?";
     private final DataSource pool;
 
     public WordDB() throws NamingException, SQLException {
@@ -43,18 +46,18 @@ public class WordDB {
         }
     }
 
-    public Word[] getWords() throws SQLException {
+    public Collection<Word> getWords() throws SQLException {
         try (Connection c = pool.getConnection()) {
             List<Word> words = new ArrayList<>();
             ResultSet rs = c.prepareStatement(GET_WORDS).executeQuery();
             while (rs.next()) {
                 words.add(new Word(rs.getString(1), rs.getInt(2)));
             }
-            return words.toArray(new Word[words.size()]);
+            return words;
         }
     }
 
-    public Word[] getRegionWords(int from, int length) throws SQLException {
+    public Collection<Word>  getRegionWords(int from, int length) throws SQLException {
         try (Connection c = pool.getConnection()) {
             List<Word> words = new ArrayList<>();
             PreparedStatement ps = c.prepareStatement(GET_WORDS_PART);
@@ -64,11 +67,27 @@ public class WordDB {
             while (rs.next()) {
                 words.add(new Word(rs.getString(1), rs.getInt(2)));
             }
-            return words.toArray(new Word[words.size()]);
+            return words;
         }
     }
 
-    public Word[] getTopWords(int length) throws SQLException {
+    public Collection<Word>  getTopWords(int length) throws SQLException {
         return getRegionWords(0, length);
+    }
+
+    public Collection<Word> getSpecifiedWords(int... ranks) throws SQLException {
+        List<Word> ret = new ArrayList<>();
+        for (int rank : ranks) ret.addAll(getRegionWords(rank, 1));
+        return ret;
+    }
+
+    public int getWordPosition(String word) throws SQLException {
+        try (Connection c = pool.getConnection()) {
+            PreparedStatement ps = c.prepareStatement(GET_WORD_POSITION);
+            ps.setString(1, word);
+            ResultSet rs = ps.executeQuery();
+            rs.first();
+            return rs.getInt(1);
+        }
     }
 }

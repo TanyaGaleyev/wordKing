@@ -93,19 +93,20 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
     }
 
     private void submit() {
-        new AsyncTask<Void,Void,Void>() {
+        new AsyncTask<Void,Void,Integer>() {
             @Override
-            protected Void doInBackground(Void... params) {
+            protected Integer doInBackground(Void... params) {
                 try {
-                    wsClient.submitWord(wordInput().getText().toString());
+                    return wsClient.submitWord(wordInput().getText().toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return null;
+                return 0;
             }
 
             @Override
-            protected void onPostExecute(Void aVoid) {
+            protected void onPostExecute(Integer position) {
+                pos = position - position % N_DISPLAYED;
                 load();
             }
         }.execute();

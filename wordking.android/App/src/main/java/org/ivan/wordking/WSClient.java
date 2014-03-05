@@ -89,7 +89,7 @@ public class WSClient {
         throw new IllegalArgumentException();
     }
 
-    public void submitWord(String word) throws XmlPullParserException, IOException {
+    public int submitWord(String word) throws XmlPullParserException, IOException {
         SoapObject request = new SoapObject(NAMESPACE, SUBMIT_WORD);
         request.addProperty("arg0", word);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -97,6 +97,7 @@ public class WSClient {
         HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
         androidHttpTransport.call(NAMESPACE + SUBMIT_WORD, envelope);
-        envelope.getResponse();
+        SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+        return Integer.parseInt(response.toString());
     }
 }

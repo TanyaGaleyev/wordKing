@@ -19,28 +19,39 @@ public class WordServiceImpl implements WordService {
     }
 
     @Override
-    public void submitWord(String word) throws Exception {
+    public int submitWord(String word) throws Exception {
         checkWordSyntax(word);
         db.submitWord(word);
+        return db.getWordPosition(word);
     }
 
     @Override
     public Word[] getWords() throws Exception {
-        return db.getWords();
+        return db.getWords().toArray(new Word[0]);
     }
 
     @Override
     public Word[] getRegionWords(int from, int length) throws Exception {
-        return db.getRegionWords(from, length);
+        return db.getRegionWords(from, length).toArray(new Word[0]);
     }
 
     @Override
     public Word[] getTopWords(int length) throws Exception {
-        return db.getTopWords(length);
+        return db.getTopWords(length).toArray(new Word[0]);
+    }
+
+    @Override
+    public Word[] getSpecifiedWords(int... ranks) throws Exception {
+        return db.getSpecifiedWords(ranks).toArray(new Word[0]);
     }
 
     private void checkWordSyntax(String word) throws WrongFormatException {
         if(!word.matches("\\w+")) throw new WrongFormatException();
+    }
+
+    @Override
+    public int getWordPosition(String word) throws Exception {
+        return db.getWordPosition(word);
     }
 
     static class WrongFormatException extends Exception {}

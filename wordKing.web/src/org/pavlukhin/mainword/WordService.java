@@ -9,13 +9,17 @@ import javax.jws.WebService;
 @WebService
 public interface WordService {
     @WebMethod
-    public int getWordsCount() throws Exception;
+    int getWordsCount() throws Exception;
     @WebMethod
-    public void submitWord(String word) throws Exception;
+    int submitWord(String word) throws Exception;
     @WebMethod
-    public Word[] getWords() throws Exception;
+    Word[] getWords() throws Exception;
     @WebMethod
-    public Word[] getRegionWords(int from, int length) throws Exception;
+    Word[] getRegionWords(int from, int length) throws Exception;
     @WebMethod
-    public Word[] getTopWords(int length) throws Exception;
+    Word[] getTopWords(int length) throws Exception;
+    @WebMethod
+    Word[] getSpecifiedWords(int... ranks) throws Exception;
+    @WebMethod
+    int getWordPosition(String word) throws Exception;
  }
