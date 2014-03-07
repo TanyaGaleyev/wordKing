@@ -58,7 +58,7 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
             }
         });
 
-        load();
+        checkedLoad(pos);
     }
 
     private View activePage() {
@@ -106,13 +106,13 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
 
             @Override
             protected void onPostExecute(Integer position) {
-                pos = position - position % N_DISPLAYED;
-                load();
+                checkedLoad(position);
+                System.out.println(position);
             }
         }.execute();
     }
 
-    private void load() {
+    private void checkedLoad(final int start) {
         new AsyncTask<Void,Void,Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
@@ -121,14 +121,16 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                return 0;
+                return pos;
             }
 
             @Override
             protected void onPostExecute(Integer wordsCount) {
                 countLabel().setText("" + wordsCount);
-                if(pos < 0 ) pos = 0;
-                if(pos >= wordsCount) pos -= N_DISPLAYED;
+                int position = start;
+                if(start < 0 ) position = 0;
+                if(start >= wordsCount) position = (wordsCount - 1) - (wordsCount - 1) % N_DISPLAYED;
+                pos = position - position % N_DISPLAYED;
                 loadWords(pos);
             }
         }.execute();
@@ -202,8 +204,7 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
         flipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.go_prev_out));
         flipper.showPrevious();
         hideWordsViews();
-        pos -= N_DISPLAYED;
-        load();
+        checkedLoad(pos - N_DISPLAYED);
     }
 
     private void showNext() {
@@ -211,8 +212,7 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
         flipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.go_next_out));
         flipper.showNext();
         hideWordsViews();
-        pos += N_DISPLAYED;
-        load();
+        checkedLoad(pos + N_DISPLAYED);
     }
 
     private void hideWordsViews() {
