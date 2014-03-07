@@ -18,12 +18,12 @@ public class WordDB {
 
     public static final String GET_WORD_COUNT = "SELECT COUNT(*) FROM (SELECT DISTINCT word FROM word) as d";
     public static final String GET_WORDS =
-            "SELECT word, COUNT(word) as cnt FROM word GROUP BY word ORDER BY cnt desc";
+            "SELECT word, COUNT(word) as cnt FROM word GROUP BY word ORDER BY cnt desc, word";
     public static final String GET_WORDS_PART =
-            "SELECT word, COUNT(word) as cnt FROM word GROUP BY word ORDER BY cnt desc LIMIT ?,?";
+            "SELECT word, COUNT(word) as cnt FROM word GROUP BY word ORDER BY cnt desc, word LIMIT ?,?";
     public static final String INSERT_WORD = "INSERT INTO word (word) VALUES(?)";
     public static final String GET_WORD_POSITION =
-            "SELECT * FROM (SELECT @rn:=@rn+1, word FROM (SELECT word FROM word GROUP BY word ORDER BY COUNT(word) DESC) g join (SELECT @rn:=-1) r) t WHERE word=?";
+            "SELECT * FROM (SELECT @rn:=@rn+1, word FROM (SELECT word FROM word GROUP BY word ORDER BY COUNT(word) DESC, word) g JOIN (SELECT @rn:=-1) r) t WHERE word=?";
     private final DataSource pool;
 
     public WordDB() throws NamingException, SQLException {
