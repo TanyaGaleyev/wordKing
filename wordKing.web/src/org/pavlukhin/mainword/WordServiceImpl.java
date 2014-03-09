@@ -8,6 +8,7 @@ import java.sql.SQLException;
  */
 @WebService(endpointInterface = "org.pavlukhin.mainword.WordService")
 public class WordServiceImpl implements WordService {
+    public static final String WORD_REGEX = "[a-zA-Z]+|[а-яА-Я]+";
     private WordDB db;
 
     public WordServiceImpl() throws SQLException, NamingException {
@@ -46,7 +47,7 @@ public class WordServiceImpl implements WordService {
     }
 
     private void checkWordSyntax(String word) throws WrongFormatException {
-        if(!word.matches("\\w+")) throw new WrongFormatException();
+        if(!word.matches(WORD_REGEX)) throw new WrongFormatException();
     }
 
     @Override
