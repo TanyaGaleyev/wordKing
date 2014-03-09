@@ -1,6 +1,7 @@
 package org.ivan.wordking;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -40,16 +41,6 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         for (int layout : new int[]{R.layout.wordpanel, R.layout.wordpanel})
             flipper.addView(inflater.inflate(layout, null));
-
-//        for (int i = 0; i < flipper.getChildCount(); i++) {
-//            Button submitBtn = (Button) flipper.getChildAt(i).findViewById(R.id.submit);
-//            submitBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    submit();
-//                }
-//            });
-//        }
         Button submitBtn = (Button) findViewById(R.id.submit);
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +75,6 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
     }
 
     private EditText wordInput() {
-//        return (EditText) activePage().findViewById(R.id.enterWord);
         return (EditText) findViewById(R.id.enterWord);
     }
 
@@ -112,7 +102,7 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
         }.execute();
     }
 
-    private void checkedLoad(final int start) {
+    private void checkedLoad(final int position0) {
         new AsyncTask<Void,Void,Integer>() {
             @Override
             protected Integer doInBackground(Void... params) {
@@ -127,16 +117,16 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
             @Override
             protected void onPostExecute(Integer wordsCount) {
                 countLabel().setText("" + wordsCount);
-                int position = start;
-                if(start < 0 ) position = 0;
-                if(start >= wordsCount) position = (wordsCount - 1) - (wordsCount - 1) % N_DISPLAYED;
+                int position = position0;
+                if(position0 < 0 ) position = 0;
+                if(position0 >= wordsCount) position = (wordsCount - 1) - (wordsCount - 1) % N_DISPLAYED;
                 pos = position - position % N_DISPLAYED;
-                loadWords(pos);
+                loadWords(pos, position - pos);
             }
         }.execute();
     }
 
-    private void loadWords(final int start) {
+    private void loadWords(final int start, final int highlight) {
 
         new AsyncTask<Void,Void,List<String>>() {
             @Override
@@ -164,6 +154,8 @@ public class WordKingActivity extends Activity implements View.OnTouchListener {
                     String w = wordIt.next();
                     v.setVisibility(View.VISIBLE);
                     v.setText(w.toUpperCase());
+                    if(words.indexOf(w) == highlight)   v.setTextColor(Color.RED);
+                    else                                v.setTextColor(Color.BLACK);
                 }
                 while (viewIt.hasNext()) viewIt.next().setVisibility(View.INVISIBLE);
             }
